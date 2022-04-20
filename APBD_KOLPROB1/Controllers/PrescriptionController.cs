@@ -28,9 +28,5 @@ namespace APBD_KOLPROB1.Controllers
         {
             return await _dbService.GetPrescriptionListAsync(lastName);
         }
-
-        [HttpPost()]
-
-
     }
 }

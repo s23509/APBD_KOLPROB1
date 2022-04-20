@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System;
+using APBD_KOLPROB1;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_KOLPROB1.Services
 {
@@ -61,6 +63,40 @@ namespace APBD_KOLPROB1.Services
             }
             await connection.CloseAsync();
             return result;
+        }
+
+        public async Task<int> AddMedicament(int pId, IEnumerable<Prescription_Medicament> pre_med_list) 
+        {
+            string sql = "INSERT INTO [Prescription_Medicament] VALUES (@IdMedicament, @IdPrescription, @Dose, @Details)";
+            await using SqlConnection readConn = new(conString);
+            await readConn.OpenAsync();
+            await using SqlCommand cmd = new(sql,readConn);
+            cmd.Transaction = (SqlTransaction)await readConn.BeginTransactionAsync();
+            int affected = 0;
+
+            try
+            {
+                foreach (var Prescription_Medicament in pre_med_list)
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("IdMedicament", Prescription_Medicament.IdMedicament);
+                    cmd.Parameters.AddWithValue("IdPrescription", Prescription_Medicament.IdPrescription);
+                    cmd.Parameters.AddWithValue("Dose", Prescription_Medicament.Dose);
+                    cmd.Parameters.AddWithValue("Details", Prescription_Medicament.Details);
+                    affected += await cmd.ExecuteNonQueryAsync();
+                }
+                await cmd.Transaction.CommitAsync();
+            }
+            catch (SqlException e)
+            {
+                await cmd.Transaction.RollbackAsync();
+                Console.WriteLine(e);
+            }
+            catch (Exception e) {
+                await cmd.Transaction.RollbackAsync();
+                Console.WriteLine(e);
+            }
+            return affected;
         }
     }
 }
