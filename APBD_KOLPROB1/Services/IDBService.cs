@@ -8,6 +8,6 @@ namespace APBD_KOLPROB1.Services
     {
         Task<IEnumerable<Prescription>> GetPrescriptionListAsync();
         Task<IEnumerable<Prescription>> GetPrescriptionListAsync(string lastName);
-        Task AddNewMedicamentToPrescription(List<PrescriptionMedicament> prescriptionMedicamentList);
+        Task<int> AddNewMedicamentToPrescription(int prescriptionId, IEnumerable<PrescriptionMedicament> prescriptionMedicamentList);
     }
 }

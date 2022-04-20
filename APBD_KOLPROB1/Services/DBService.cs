@@ -77,28 +77,53 @@ namespace APBD_KOLPROB1.Services
             return result;
 
         }
-        public async Task AddNewMedicamentToPrescription(List<PrescriptionMedicament> prescriptionMedicamentList)
+        public async Task<int> AddNewMedicamentToPrescription(int prescriptionId, IEnumerable<PrescriptionMedicament> prescriptionMedicamentList)
         {
+
+            /*string sql = "INSERT INTO Prescription_Medicament VALUES(" + 
+            $"{prescriptionMedicament.IdMedicament}, {prescriptionMedicament.IdPrescription}, " +
+            $"{prescriptionMedicament.Dose}, {prescriptionMedicament.Details})";*/
+
+            string sql = "INSERT INTO [Prescription_Medicament] VALUES (@IdMedicament, @IdPrescription, @Dose, @Details)";
             
-            foreach(var prescriptionMedicament in prescriptionMedicamentList)
+            await using SqlConnection connection = new(ConString);
+           
+            await connection.OpenAsync();
+
+            await using SqlCommand command = new(sql, connection);
+            command.Transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+
+            int affectedRows = 0;
+
+            try
             {
+                foreach (var prescriptionMedicament in prescriptionMedicamentList)
+                {
 
-                string sql = "INSERT INTO Prescription_Medicament VALUES(" + 
-                    $"{prescriptionMedicament.IdMedicament}, {prescriptionMedicament.IdPrescription}, " +
-                    $"{prescriptionMedicament.Dose}, {prescriptionMedicament.Details})";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("IdMedicament", prescriptionMedicament.IdMedicament);
+                    command.Parameters.AddWithValue("IdPrescription", prescriptionId);
+                    command.Parameters.AddWithValue("Dose", prescriptionMedicament.Dose);
+                    command.Parameters.AddWithValue("Details", prescriptionMedicament.Details);
+                    affectedRows += await command.ExecuteNonQueryAsync();
 
-                await using SqlConnection connection = new(ConString);
-                await using SqlCommand command = new(sql, connection);
+                }
 
-                await connection.OpenAsync();
-
-                //???
-                await command.ExecuteNonQueryAsync();
-               
+                await command.Transaction.CommitAsync();
 
             }
+            catch(SqlException e)
+            {
+                await command.Transaction.RollbackAsync();
+                Console.WriteLine(e);
+            }
+            catch(Exception e)
+            {
+                await command.Transaction.RollbackAsync();
+                Console.WriteLine(e);
+            }
 
-            
+            return affectedRows;
 
         }
     }

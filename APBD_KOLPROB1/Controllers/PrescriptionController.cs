@@ -7,7 +7,7 @@ using System.Linq;
 namespace APBD_KOLPROB1.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PrescriptionController : ControllerBase
     {
 
@@ -27,7 +27,7 @@ namespace APBD_KOLPROB1.Controllers
         public async Task<IActionResult> GetPrescriptionList(string lastName)
         {
             var result = await _dbService.GetPrescriptionListAsync(lastName);
-            if(result.Count() == 0)
+            if(!result.Any())
                 return NotFound("No prescription for patient with that last name.");
             return Ok(result);
 
