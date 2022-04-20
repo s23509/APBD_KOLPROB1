@@ -21,8 +21,10 @@ namespace APBD_KOLPROB1.Controllers
         public async Task<IActionResult> AddNewMedicamentToPrescription(int prescriptionId, IEnumerable<PrescriptionMedicament> prescriptionMedicamentList)
         {
             int affected = await _dbService.AddNewMedicamentToPrescription(prescriptionId, prescriptionMedicamentList);
+            
             if (affected == 0)
                 return BadRequest();
+            
             if(affected == prescriptionMedicamentList.Count())
             {
                 foreach (PrescriptionMedicament prescriptionMedicament in prescriptionMedicamentList)
