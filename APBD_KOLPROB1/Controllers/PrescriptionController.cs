@@ -17,7 +17,7 @@ namespace APBD_KOLPROB1.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<Prescription>> GetPrescriptionList()
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionList()
         {
             return await _dbService.GetPrescriptionListAsync();
         }

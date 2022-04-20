@@ -2,13 +2,14 @@
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_KOLPROB1.Services
 {
     public class DBService : IDBService
     {
         private const string ConString = "Data Source=db-mssql;Initial Catalog=2019SBD;Integrated Security=True";
-        public async Task<IList<Prescription>> GetPrescriptionListAsync()
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync()
         {
 
             string sql = "SELECT * FROM Prescription ORDER BY Date DESC";
