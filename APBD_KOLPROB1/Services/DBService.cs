@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_KOLPROB1.Services
 {
