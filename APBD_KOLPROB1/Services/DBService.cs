@@ -39,12 +39,12 @@ namespace APBD_KOLPROB1.Services
             return result;
 
         }
-        public async Task<IList<Prescription>> GetPrescriptionListAsync(string lastName)
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync(string lastName)
         {
 
             string sql = "SELECT * FROM Prescription prescription " +
                 " JOIN Patient patient ON prescription.IdPatient = patient.IdPatient " +
-               $" WHERE patient.LastName = {lastName}" +
+               $" WHERE patient.LastName = '{lastName}'" +
                 " ORDER BY Date DESC";
 
             List<Prescription> result = new();

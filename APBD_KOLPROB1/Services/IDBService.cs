@@ -7,7 +7,7 @@ namespace APBD_KOLPROB1.Services
     public interface IDBService
     {
         Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync();
-        Task<IList<Prescription>> GetPrescriptionListAsync(string lastName);
+        Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync(string lastName);
         Task AddNewMedicamentToPrescription(List<PrescriptionMedicament> prescriptionMedicamentList);
     }
 }
