@@ -9,7 +9,7 @@ namespace APBD_KOLPROB1.Services
     public class DBService : IDBService
     {
         private const string ConString = "Data Source=db-mssql;Initial Catalog=2019SBD;Integrated Security=True";
-        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync()
+        public async Task<IEnumerable<Prescription>> GetPrescriptionListAsync()
         {
 
             string sql = "SELECT * FROM Prescription ORDER BY Date DESC";
@@ -39,7 +39,7 @@ namespace APBD_KOLPROB1.Services
             return result;
 
         }
-        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync(string lastName)
+        public async Task<IEnumerable<Prescription>> GetPrescriptionListAsync(string lastName)
         {
 
             /* string sql = "SELECT * FROM Prescription prescription " +

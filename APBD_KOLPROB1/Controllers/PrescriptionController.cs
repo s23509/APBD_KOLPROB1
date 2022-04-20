@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using APBD_KOLPROB1.Services;
+using System.Linq;
 
 namespace APBD_KOLPROB1.Controllers
 {
@@ -17,15 +18,19 @@ namespace APBD_KOLPROB1.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionList()
+        public async Task<IActionResult> GetPrescriptionList()
         {
-            return await _dbService.GetPrescriptionListAsync();
+            return Ok(await _dbService.GetPrescriptionListAsync());
         }
 
         [HttpGet("{lastName}")]
-        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionList(string lastName)
+        public async Task<IActionResult> GetPrescriptionList(string lastName)
         {
-            return await _dbService.GetPrescriptionListAsync(lastName);
+            var result = await _dbService.GetPrescriptionListAsync(lastName);
+            if(result.Count() == 0)
+                return NotFound("No prescription for patient with that last name.");
+            return Ok(result);
+
         }
 
     }
