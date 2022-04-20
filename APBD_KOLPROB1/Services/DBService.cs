@@ -7,7 +7,6 @@ namespace APBD_KOLPROB1.Services
 {
     public class DBService : IDBService
     {
-
         private const string ConString = "Data Source=db-mssql;Initial Catalog=2019SBD;Integrated Security=True";
         public async Task<IList<Prescription>> GetPrescriptionListAsync()
         {
@@ -39,7 +38,6 @@ namespace APBD_KOLPROB1.Services
             return result;
 
         }
-
         public async Task<IList<Prescription>> GetPrescriptionListAsync(string lastName)
         {
 
@@ -72,6 +70,30 @@ namespace APBD_KOLPROB1.Services
 
             await connection.CloseAsync();
             return result;
+
+        }
+        public async Task AddNewMedicamentToPrescription(List<PrescriptionMedicament> prescriptionMedicamentList)
+        {
+            
+            foreach(var prescriptionMedicament in prescriptionMedicamentList)
+            {
+
+                string sql = "INSERT INTO Prescription_Medicament VALUES(" + 
+                    $"{prescriptionMedicament.IdMedicament}, {prescriptionMedicament.IdPrescription}, " +
+                    $"{prescriptionMedicament.Dose}, {prescriptionMedicament.Details})";
+
+                await using SqlConnection connection = new(ConString);
+                await using SqlCommand command = new(sql, connection);
+
+                await connection.OpenAsync();
+
+                //???
+                await command.ExecuteNonQueryAsync();
+               
+
+            }
+
+            
 
         }
     }

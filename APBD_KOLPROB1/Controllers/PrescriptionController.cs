@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using APBD_KOLPROB1.Services;
 
 namespace APBD_KOLPROB1.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PrescriptionController : Controller
+    public class PrescriptionController : ControllerBase
     {
 
         private readonly IDBService _dbService;
@@ -28,12 +27,6 @@ namespace APBD_KOLPROB1.Controllers
         {
             return await _dbService.GetPrescriptionListAsync(lastName);
         }
-
-        [HttpPost]
-        public async void AddNewMedicament()
-        {
-        }
-
 
     }
 }
