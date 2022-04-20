@@ -42,15 +42,19 @@ namespace APBD_KOLPROB1.Services
         public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionListAsync(string lastName)
         {
 
-            string sql = "SELECT * FROM Prescription prescription " +
-                " JOIN Patient patient ON prescription.IdPatient = patient.IdPatient " +
-               $" WHERE patient.LastName = '{lastName}'" +
-                " ORDER BY Date DESC";
+            /* string sql = "SELECT * FROM Prescription prescription " +
+                    "JOIN Patient patient ON prescription.IdPatient = patient.IdPatient " +
+                    $"WHERE patient.LastName = '{lastName}' " +
+                    "ORDER BY Date DESC"; */
+
+            string sql = "SELECT [Prescription].* FROM [Prescription] JOIN [Patient] ON [Prescription].[IdPatient] = [Patient].[IdPatient] WHERE LastName = @LASTNAME";
 
             List<Prescription> result = new();
 
             await using SqlConnection connection = new(ConString);
             await using SqlCommand command = new(sql, connection);
+
+            command.Parameters.AddWithValue("LASTNAME", lastName);
 
             await connection.OpenAsync();
             await using SqlDataReader dr = await command.ExecuteReaderAsync();
